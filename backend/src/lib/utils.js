@@ -11,7 +11,7 @@ export const generateToken = (userId, res) => {
     sameSite: "lax", // Changed from strict to lax to allow cross-origin
     secure: process.env.NODE_ENV !== "development",
     path: "/",
-    domain: process.env.NODE_ENV === "development" ? "localhost" : undefined
+    domain: process.env.NODE_ENV === "development" ? "https://suno-suno-delta.vercel.app" : undefined
   });
 
   res.setHeader("Access-Control-Expose-Headers", "Authorization");

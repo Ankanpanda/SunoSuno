@@ -10,7 +10,7 @@ export default defineConfig({
     allowedHosts: ['*'],
     proxy: {
       '/api': {
-        target: 'http://localhost:5001',
+        target: 'https://suno-suno-backend.vercel.app',
         changeOrigin: true,
         secure: false,
       }
