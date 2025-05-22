@@ -15,7 +15,7 @@ import { app, server } from "./lib/socket.js";
 
 dotenv.config();
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 5001;  // Use Vercel's PORT or fallback to 5001
 const __dirname = path.resolve();
 
 app.use(express.json());
@@ -43,4 +43,10 @@ if (process.env.NODE_ENV === "production") {
 server.listen(PORT, () => {
   console.log("server is running on PORT:" + PORT);
   connectDB();
+}).on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    console.log(`Port ${PORT} is already in use`);
+  } else {
+    console.error('Server error:', err);
+  }
 });
