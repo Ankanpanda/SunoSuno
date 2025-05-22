@@ -4,6 +4,8 @@ import { useAuthStore } from "../store/useAuthStore";
 import { useCallStore } from "../store/useCallStore";
 import { Phone, PhoneOff, Mic, MicOff, Video, VideoOff, X } from "lucide-react";
 import toast from "react-hot-toast";
+import { useThemeStore } from "../store/useThemeStore";
+import { THEMES } from "../constants";
 
 const CallPage = () => {
   const { callId } = useParams();
@@ -27,6 +29,7 @@ const CallPage = () => {
   const [isVideoOff, setIsVideoOff] = useState(false);
   const { authUser } = useAuthStore();
   const [localIsCaller, setLocalIsCaller] = useState(false);
+  const { theme, setTheme } = useThemeStore();
 
   // Determine if the current user is the caller
   const isUserCaller = useMemo(() => {
@@ -43,9 +46,19 @@ const CallPage = () => {
       return;
     }
 
+    // Validate callId parameter
+    if (!callId) {
+      console.error("Call ID is missing");
+      toast.error("Invalid call URL");
+      navigate("/");
+      return;
+    }
+
     try {
+      // Get the call session ID from the store
       const { callSessionId, isCaller } = useCallStore.getState();
       
+      // Validate that we have a call session ID
       if (!callSessionId) {
         console.error("No call session ID in store");
         toast.error("Invalid call session");
@@ -61,25 +74,25 @@ const CallPage = () => {
 
       setLocalIsCaller(isCaller);
 
-      // Socket event listeners
+      console.log("Call page initialized:", {
+        isCaller,
+        callSessionId,
+        authUserId: authUser._id,
+        socketConnected,
+        socketId: socket?.id
+      });
+
+      // Only start the call if we're the caller and there's no active call
+      if (isCaller && !isCallActive) {
+        console.log("Call already initiated as caller");
+      }
+
+      // Set up socket event listeners
       socket.on("call-offer", async ({ offer, from, callSessionId }) => {
         console.log("Received call offer:", { from, callSessionId });
         if (!isCaller) {
           try {
-            // Ensure we're in a stable state before setting remote description
-            const pc = await handleIncomingCall({ offer, from, callSessionId });
-            if (pc.signalingState !== "stable") {
-              await pc.setRemoteDescription({ type: "rollback" });
-            }
-            await pc.setRemoteDescription(new RTCSessionDescription(offer));
-            const answer = await pc.createAnswer();
-            await pc.setLocalDescription(answer);
-            socket.emit("call-answer", {
-              answer,
-              to: from,
-              from: authUser._id,
-              callSessionId
-            });
+            await handleIncomingCall({ offer, from, callSessionId });
           } catch (error) {
             console.error("Error handling incoming call:", error);
             toast.error("Failed to handle incoming call");
@@ -92,13 +105,7 @@ const CallPage = () => {
         console.log("Received call answer:", { from, callSessionId });
         if (isCaller) {
           try {
-            const pc = await handleCallAnswer(answer, from, callSessionId);
-            // Only set remote description if we're in the correct state
-            if (pc.signalingState === "have-local-offer") {
-              await pc.setRemoteDescription(new RTCSessionDescription(answer));
-            } else {
-              console.warn("Unexpected signaling state:", pc.signalingState);
-            }
+            await handleCallAnswer(answer, from, callSessionId);
           } catch (error) {
             console.error("Error handling call answer:", error);
             toast.error("Failed to handle call answer");
@@ -273,6 +280,7 @@ const CallPage = () => {
 
   return (
     <div className="flex flex-col h-screen bg-gray-900 text-white">
+      {/* Header */}
       <div className="flex-1 flex items-center justify-center p-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-6xl">
           {/* Remote Video (larger) */}
@@ -346,5 +354,4 @@ const CallPage = () => {
   );
 };
 
-export default CallPage;
-// export default Call
+export default CallPage;
