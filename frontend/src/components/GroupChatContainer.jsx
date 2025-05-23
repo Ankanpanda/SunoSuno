@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { useNavigate } from 'react-router-dom';
 import { useGroupStore } from "../store/useGroupStore";
 import { useAuthStore } from "../store/useAuthStore";
 import MessageInput from "./MessageInput";
@@ -106,6 +107,7 @@ const GroupChatHeader = () => {
   const { selectedGroup } = useGroupStore();
   const { authUser } = useAuthStore();
   const { leaveGroup } = useGroupStore();
+  const navigate = useNavigate();
 
   const handleLeaveGroup = async () => {
     if (confirm("Are you sure you want to leave this group?")) {
@@ -113,18 +115,25 @@ const GroupChatHeader = () => {
     }
   };
 
+  const handleProfileClick = () => {
+    navigate(`/group/${selectedGroup._id}/profile`);
+  };
+
   return (
     <div className="p-2 sm:p-2.5 border-b border-base-300">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2 sm:gap-3">
-          <div className="avatar">
+          <button 
+            onClick={handleProfileClick}
+            className="avatar hover:opacity-80 transition-opacity"
+          >
             <div className="size-8 sm:size-10 rounded-full relative">
               <img
                 src={selectedGroup.groupImage || "/group-avatar.png"}
                 alt={selectedGroup.name}
               />
             </div>
-          </div>
+          </button>
 
           <div>
             <h3 className="font-medium text-sm sm:text-base">{selectedGroup.name}</h3>

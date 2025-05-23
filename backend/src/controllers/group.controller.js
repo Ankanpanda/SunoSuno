@@ -181,3 +181,45 @@ export const leaveGroup = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
+//adding profile pic
+export const updateGroupProfile = async (req, res) => {
+  try {
+    const { groupImage } = req.body;
+    const { groupId } = req.params;
+    const userId = req.user._id;
+
+    // Check if group exists and user is admin
+    const group = await Group.findById(groupId);
+    if (!group) {
+      return res.status(404).json({ message: "Group not found" });
+    }
+
+    // Verify if the user is the group admin
+    if (group.admin.toString() !== userId.toString()) {
+      return res.status(403).json({ message: "Only group admin can update group profile" });
+    }
+
+    if (!groupImage) {
+      return res.status(400).json({ message: "Group image is required" });
+    }
+
+    const uploadResponse = await cloudinary.uploader.upload(groupImage);
+    const updatedGroup = await Group.findByIdAndUpdate(
+      groupId,
+      { groupImage: uploadResponse.secure_url },
+      { new: true }
+    ).populate("members", "-password")
+     .populate("admin", "-password");
+
+    // Notify all group members about the update
+    group.members.forEach(memberId => {
+      io.to(`user_${memberId}`).emit("groupUpdated", updatedGroup);
+    });
+
+    res.status(200).json(updatedGroup);
+  } catch (error) {
+    console.log("Error in update group profile:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};

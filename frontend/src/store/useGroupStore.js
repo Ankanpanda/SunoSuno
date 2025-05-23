@@ -213,4 +213,28 @@ export const useGroupStore = create((set, get) => ({
       return false;
     }
   },
+
+  updateGroupProfile: async (groupId, data) => {
+    set({ isUpdatingGroupProfile: true });
+    try {
+      console.log("Updating group profile...");
+      const res = await axiosInstance.put(`/groups/${groupId}/update-profile`, data);
+      console.log("Group profile update response:", res.data);
+      
+      set((state) => ({
+        selectedGroup: {
+          ...state.selectedGroup,
+          ...res.data
+        }
+      }));
+      
+      toast.success("Group profile updated successfully");
+      return res.data;
+    } catch (error) {
+      console.error("Group profile update error:", error);
+      toast.error(error.response?.data?.message || "Group profile update failed");
+      throw error;
+    } finally {
+      set({ isUpdatingGroupProfile: false });
+}},
 }));

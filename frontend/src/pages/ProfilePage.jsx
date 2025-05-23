@@ -1,24 +1,68 @@
 import { useState } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 import { Camera, Mail, User } from "lucide-react";
+import toast from "react-hot-toast";
 
 const ProfilePage = () => {
   const { authUser, isUpdatingProfile, updateProfile } = useAuthStore();
   const [selectedImg, setSelectedImg] = useState(null);
 
+  const compressImage = (base64Str) => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.src = base64Str;
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        const MAX_WIDTH = 800;
+        const MAX_HEIGHT = 800;
+        let width = img.width;
+        let height = img.height;
+
+        if (width > height) {
+          if (width > MAX_WIDTH) {
+            height *= MAX_WIDTH / width;
+            width = MAX_WIDTH;
+          }
+        } else {
+          if (height > MAX_HEIGHT) {
+            width *= MAX_HEIGHT / height;
+            height = MAX_HEIGHT;
+          }
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, width, height);
+        
+        // Compress and convert to JPEG format
+        const compressedBase64 = canvas.toDataURL("image/jpeg", 0.7);
+        resolve(compressedBase64);
+      };
+    });
+  };
+
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
+    if (!file.type.startsWith("image/")) {
+      toast.error("Please select an image file");
+      return;
+    }
+
     const reader = new FileReader();
-
-    reader.readAsDataURL(file);
-
-    reader.onload = async () => {
-      const base64Image = reader.result;
-      setSelectedImg(base64Image);
-      await updateProfile({ profilePic: base64Image });
+    reader.onloadend = async () => {
+      try {
+        const compressedImage = await compressImage(reader.result);
+        setSelectedImg(compressedImage);
+        await updateProfile({ profilePic: compressedImage });
+      } catch (error) {
+        console.error("Error processing image:", error);
+        toast.error("Failed to process image");
+      }
     };
+    reader.readAsDataURL(file);
   };
 
   return (
@@ -101,4 +145,5 @@ const ProfilePage = () => {
     </div>
   );
 };
+
 export default ProfilePage;

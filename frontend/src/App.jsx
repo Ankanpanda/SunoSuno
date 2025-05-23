@@ -5,7 +5,9 @@ import SignUpPage from "./pages/SignUpPage";
 import LoginPage from "./pages/LoginPage";
 import SettingsPage from "./pages/SettingsPage";
 import ProfilePage from "./pages/ProfilePage";
-import CallPage from "./pages/CallPage"; // ✅ New Call Page
+import CallPage from "./pages/CallPage"; 
+import GroupProfileUpdate from "./components/GroupProfileUpdate";
+
 
 import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import { useAuthStore } from "./store/useAuthStore";
@@ -342,6 +344,7 @@ const App = () => {
           <Route path="/profile" element={isCheckingAuth ? <LoadingScreen /> : authUser ? <Navigate to={`/profile/${authUser._id}`} /> : <Navigate to="/login" />} />
           <Route path="/profile/:userId" element={isCheckingAuth ? <LoadingScreen /> : authUser ? <ProfilePage /> : <Navigate to="/login" />} />
           <Route path="/call/:callId" element={isCheckingAuth ? <LoadingScreen /> : authUser ? <CallPage /> : <Navigate to="/login" />} />
+          <Route path="/group/:groupId/profile" element={isCheckingAuth ? <LoadingScreen /> : authUser ? <GroupProfileUpdate /> : <Navigate to="/login" />} />
         </Routes>
       </div>
 
