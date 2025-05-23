@@ -8,7 +8,6 @@ A modern web application built with React and Node.js, featuring real-time commu
 - Modern UI with Tailwind CSS and DaisyUI
 - Secure authentication system
 - Cloud storage integration with Cloudinary
-- AI integration with OpenAI
 - Responsive design
 
 ## 🛠️ Tech Stack
@@ -32,7 +31,6 @@ A modern web application built with React and Node.js, featuring real-time commu
 - JWT Authentication
 - Bcrypt for password hashing
 - Cloudinary for file storage
-- OpenAI integration
 
 ## 📦 Installation
 
@@ -61,7 +59,6 @@ JWT_SECRET=your_jwt_secret
 CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
 CLOUDINARY_API_KEY=your_cloudinary_api_key
 CLOUDINARY_API_SECRET=your_cloudinary_api_secret
-OPENAI_API_KEY=your_openai_api_key
 ```
 
 ## 🚀 Running the Application
