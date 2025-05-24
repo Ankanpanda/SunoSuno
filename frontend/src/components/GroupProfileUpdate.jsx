@@ -94,7 +94,7 @@ const GroupProfileUpdate = () => {
           <div className="flex flex-col items-center gap-4">
             <div className="relative">
               <img
-                src={imagePreview || selectedGroup?.groupImage || "/group-avatar.png"}
+                src={imagePreview || selectedGroup?.groupImage || "/group.png"}
                 alt="Group Profile"
                 className="w-32 h-32 rounded-full object-cover border-4 border-base-300"
               />

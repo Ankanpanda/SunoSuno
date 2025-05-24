@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useAuthStore } from "../store/useAuthStore";
-import { LogOut, MessageSquare, Settings, User, Menu } from "lucide-react";
+import { LogOut, Settings, User, Menu } from "lucide-react";
 
 const Navbar = ({onMenuClick}) => {
   const { logout, authUser } = useAuthStore();
@@ -20,7 +20,11 @@ const Navbar = ({onMenuClick}) => {
 
             <Link to="/" className="flex items-center gap-2.5 hover:opacity-80 transition-all">
               <div className="size-9 rounded-lg bg-primary/10 flex items-center justify-center">
-                <MessageSquare className="w-5 h-5 text-primary" />
+                <img
+                  src="/Logo - Trans.png"
+                  alt="SunoSuno Logo"
+                  className="w-7 h-7 object-cover"
+                />
               </div>
               <h1 className="text-lg font-bold text-base-content">SunoSuno</h1>
             </Link>

@@ -1,4 +1,4 @@
-import { X, Phone, Video } from "lucide-react";
+import { X, Video } from "lucide-react";
 import { useAuthStore } from "../store/useAuthStore";
 import { useChatStore } from "../store/useChatStore";
 import { useNavigate } from "react-router-dom";

@@ -131,7 +131,7 @@ const Sidebar = ({ isMobileMenuOpen, onCloseMobileMenu }) => {
                   <div className="avatar">
                     <div className="size-10 rounded-full">
                       <img
-                        src={group.groupImage || "/group-avatar.png"}
+                        src={group.groupImage || "/group.png"}
                         alt={group.name}
                       />
                     </div>

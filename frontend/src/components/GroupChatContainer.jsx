@@ -129,7 +129,7 @@ const GroupChatHeader = () => {
           >
             <div className="size-8 sm:size-10 rounded-full relative">
               <img
-                src={selectedGroup.groupImage || "/group-avatar.png"}
+                src={selectedGroup.groupImage || "/group.png"}
                 alt={selectedGroup.name}
               />
             </div>
