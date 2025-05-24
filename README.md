@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="frontend/public/Logo - Trans.png" alt="SunoSuno Logo" width="200">
+</p>
+
 # SunoSuno
 
 A modern web application built with React and Node.js, featuring real-time communication capabilities.
