@@ -815,8 +815,8 @@ export const useCallStore = create((set, get) => ({
         
         return true;
       } catch (descError) {
-        console.error("Error setting remote description:", descError);
-        // toast.error("Failed to set remote description: " + descError.message);
+        console.error("Network Error Detected. Video call cannot be established.");
+        toast.error("Network Error Detected. Video call cannot be established.");
         return false;
       }
     } catch (error) {
