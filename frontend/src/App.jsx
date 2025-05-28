@@ -216,7 +216,7 @@ const App = () => {
         try {
           await handleIceCandidate(candidate, from, effectiveCallSessionId);
         } catch (error) {
-          console.error("Error handling ICE candidate:", error);
+          console.error("Error handling ICE candidate");
         }
       });
 
@@ -391,7 +391,7 @@ const App = () => {
                       }
                     } catch (error) {
                       console.error("Error accepting call:", error);
-                      toast.error("Error accepting call: " + error.message);
+                      toast.error("Error accepting call");
                     }
                   }}
                   className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
