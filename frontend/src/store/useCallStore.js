@@ -528,12 +528,12 @@ export const useCallStore = create((set, get) => ({
         socket.emit("call-user", signalData);
         
         // Also emit call-offer event directly
-        socket.emit("call-offer", {
-          to,
-          from: useAuthStore.getState().authUser._id,
-          offer: peerConnection.localDescription,
-          callSessionId
-        });
+        // socket.emit("call-offer", {
+        //   to,
+        //   from: useAuthStore.getState().authUser._id,
+        //   offer: peerConnection.localDescription,
+        //   callSessionId
+        // });
 
         // Update the store state
         set((state) => ({
