@@ -816,7 +816,7 @@ export const useCallStore = create((set, get) => ({
         return true;
       } catch (descError) {
         console.error("Error setting remote description:", descError);
-        toast.error("Failed to set remote description: " + descError.message);
+        // toast.error("Failed to set remote description: " + descError.message);
         return false;
       }
     } catch (error) {
