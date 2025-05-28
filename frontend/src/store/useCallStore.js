@@ -333,7 +333,7 @@ export const useCallStore = create((set, get) => ({
       }
     } catch (error) {
       console.error("Error accepting call:", error);
-      toast.error(error.message || "Failed to accept call");
+      toast.error("Failed to accept call");
       return false;
     }
   },
@@ -367,7 +367,7 @@ export const useCallStore = create((set, get) => ({
       return true;
     } catch (error) {
       console.error("Error rejecting call:", error);
-      toast.error(error.message || "Failed to reject call");
+      toast.error("Failed to reject call");
       return false;
     }
   },
@@ -667,12 +667,12 @@ export const useCallStore = create((set, get) => ({
         return callSessionId;
       } catch (error) {
         console.error("Error handling incoming call:", error);
-        toast.error(error.message || "Failed to handle incoming call");
+        toast.error("Failed to handle incoming call");
         throw error;
       }
     } catch (error) {
       console.error("Error handling incoming call:", error);
-      toast.error(error.message || "Failed to handle incoming call");
+      toast.error("Failed to handle incoming call");
       throw error;
     }
   },
@@ -1169,7 +1169,7 @@ export const useCallStore = create((set, get) => ({
       console.log("Call ended successfully");
     } catch (error) {
       console.error("Error ending call:", error);
-      toast.error(error.message || "Failed to end call");
+      toast.error("Failed to end call");
     }
   },
 
